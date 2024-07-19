@@ -45,7 +45,12 @@ SizedBox(height: 10,),
   width: 200,
   height: 40, // Set your desired width here
   child: ElevatedButton(
-    onPressed: () => {},
+    onPressed: () => {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyHomePage()),
+      )
+    },
     child: Text(
       'BMI Calculator',
       style: TextStyle(color: Theme.of(context).colorScheme.tertiary),

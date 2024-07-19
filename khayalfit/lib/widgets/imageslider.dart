@@ -43,11 +43,6 @@ class _ImageSliderState extends State<ImageSlider> {
               fit: BoxFit.cover,
             ),
           ],
-
-          /// Called whenever the page in the center of the viewport changes.
-          onPageChanged: (value) {
-            print('Page changed: $value');
-          },
           disableUserScrolling: false,
      
           autoPlayInterval: 5000,
