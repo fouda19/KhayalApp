@@ -14,6 +14,7 @@ class MyHomePage extends StatefulWidget {
 enum QuestionType { text, radio, dropdown, multipleFields }
 
 class SubQuestion {
+  // for multiple questions in the same page
   final String text;
   final QuestionType type;
   final List<String>? options;
@@ -25,7 +26,8 @@ class Question {
   final String text;
   final QuestionType type;
   final List<String>? options;
-  final List<SubQuestion>? subQuestions;
+  final List<SubQuestion>?
+      subQuestions; // for multiple questions in the same page
 
   Question(this.text, this.type, {this.options, this.subQuestions});
 }
@@ -95,22 +97,46 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentQuestionIndex = 0;
   Map<int, dynamic> _answers = {};
   Map<int, bool> _isValid = {};
+  Map<int, bool> _isEmailValid = {};
 
   void _nextQuestion() {
-  if (_validateCurrentQuestion()) {
-    if (_currentQuestionIndex < _questions.length - 1) {
-      setState(() {
-        _currentQuestionIndex++;
-      });
-      _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+    //next button
+    if ((_validateCurrentQuestion() == "truetrue") || (_validateCurrentQuestion() == "truefalse")) {
+      if (_currentQuestionIndex < _questions.length - 1) {
+        setState(() {
+          _currentQuestionIndex++;
+        });
+        _pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    } else {
+      if (_validateCurrentQuestion() == "falsefalse" ||
+          _validateCurrentQuestion() == "falsetrue") {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Alert'),
+              content: Text('Please fill in all the fields.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
-}
 
   void _previousQuestion() {
+    //back button
     if (_currentQuestionIndex > 0) {
       setState(() {
         _currentQuestionIndex--;
@@ -123,14 +149,104 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _submitAnswers() {
-    if (_validateCurrentQuestion()) {
+    // submit button
+    if (_validateCurrentQuestion() == "truetrue") {
       print(_answers);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Thank You'),
+              content: Text('Your data has been received.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+    } else {
+      if (_validateCurrentQuestion() == "falsefalse" ||
+          _validateCurrentQuestion() == "falsetrue") {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Alert'),
+              content: Text('Please fill in all the fields.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }else{
+        if (_validateCurrentQuestion() == "truefalse") {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Alert'),
+                content: Text('Email and Confirm Email do not match.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
     }
   }
 
-    bool _validateCurrentQuestion() {
+  // bool _validateEmailFields(int questionIndex) {
+  //   final answers = _answers[questionIndex] as Map?;
+  //   if (answers != null) {
+  //     final email = answers[0];
+  //     final confirmEmail = answers[1];
+  //     if (email != confirmEmail) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return AlertDialog(
+  //             title: Text('Error'),
+  //             content: Text('Email and Confirm Email do not match.'),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //                 child: Text('OK'),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  String _validateCurrentQuestion() {
+    // to check that all questions are answered
     final question = _questions[_currentQuestionIndex];
     bool isValid = false;
+    bool isEmailValid = false;
 
     if (question.type == QuestionType.text) {
       final answer = _answers[_currentQuestionIndex];
@@ -147,24 +263,35 @@ class _MyHomePageState extends State<MyHomePage> {
         isValid = false;
       } else {
         isValid = question.subQuestions!.every((subQuestion) {
-          final subAnswer = answers[question.subQuestions!.indexOf(subQuestion)];
-          return subAnswer != null && (subAnswer is String ? subAnswer.isNotEmpty : subAnswer != null);
+          final subAnswer =
+              answers[question.subQuestions!.indexOf(subQuestion)];
+          return subAnswer != null &&
+              (subAnswer is String ? subAnswer.isNotEmpty : subAnswer != null);
         });
+        if (isValid &&
+            (answers.values.elementAt(3) != (answers.values.elementAt(4)))) {
+          // to check that email and confirm email are identical
+          isEmailValid = false;
+        } else {
+          if (isValid) isEmailValid = true;
+        }
       }
     }
 
     setState(() {
       _isValid[_currentQuestionIndex] = isValid;
+      _isEmailValid[_currentQuestionIndex] = isEmailValid;
     });
-
-    return isValid;
+    return isValid.toString() + isEmailValid.toString();
   }
 
   void _saveAnswer(int index, dynamic answer) {
+    // saving the answer for every question
     _answers[index] = answer;
   }
 
   void _saveSubAnswer(int questionIndex, int subQuestionIndex, dynamic answer) {
+    //saving the answers for a page that has multiple questions in it
     if (_answers[questionIndex] == null) {
       _answers[questionIndex] = {};
     }
@@ -244,9 +371,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: TextStyle(fontSize: 18),
                               ),
                               SizedBox(height: 8),
-                                if (subQuestion.text == 'Phone Number')
+                              if (subQuestion.text ==
+                                  'Phone Number') // to make sure phone number is entered in digits only
                                 TextField(
-                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   onChanged: (value) =>
                                       _saveSubAnswer(index, subIndex, value),
                                   decoration: InputDecoration(
@@ -254,7 +384,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     labelText: subQuestion.text,
                                   ),
                                 )
-                                else
+                              else
                                 TextField(
                                   onChanged: (value) =>
                                       _saveSubAnswer(index, subIndex, value),
@@ -270,17 +400,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 SizedBox(height: 20),
-                if (_currentQuestionIndex < _questions.length - 1)
+                if (_currentQuestionIndex <
+                    _questions.length -
+                        1) // to show next button if there are more questions
                   ElevatedButton(
                     onPressed: _nextQuestion,
                     child: Text('Next'),
                   )
-                else
+                else // to show submit button if there are no more questions
                   ElevatedButton(
                     onPressed: _submitAnswers,
                     child: Text('Submit'),
                   ),
-                if (_currentQuestionIndex > 0)
+                if (_currentQuestionIndex >
+                    0) // to show back button if there are previous questions
                   ElevatedButton(
                     onPressed: _previousQuestion,
                     child: Text('Back'),
