@@ -37,6 +37,7 @@ dependencies:
   flutter_image_slideshow: any
   url_launcher: ^6.0.20 
   font_awesome_flutter: ^9.1.0 
+  google_fonts: ^4.0.0
 
 dev_dependencies:
   flutter_test:

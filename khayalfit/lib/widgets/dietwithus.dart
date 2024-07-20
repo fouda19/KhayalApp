@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-class About extends StatelessWidget {
+import 'package:khayalfit/widgets/imageslider.dart';
+List<String> images = [
+  'assets/images/1.jpeg',
+  'assets/images/2.jpeg',
+  'assets/images/3.jpg',
+  'assets/images/4.jpg',
+];
+class DietWithUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +21,7 @@ class About extends StatelessWidget {
             child: Padding(
               padding:  EdgeInsets.only(left: 8.0),
               child: Text(
-                'About Us',
+                'Diet with us',
                 style: GoogleFonts.abrilFatface(
                   fontSize: 20,
                   color: Theme.of(context).colorScheme.tertiary,
@@ -22,17 +29,19 @@ class About extends StatelessWidget {
               ),
             ),
           ),
-          
         
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text( 'KhayalFit is a fitness app that helps you to stay fit and healthy. It provides you with a variety of exercises and diet plans to help you achieve your fitness goals. Our app is designed to be user-friendly and easy to use, so you can focus on your fitness journey without any distractions. Whether you are a beginner or an experienced fitness enthusiast, KhayalFit has something for everyone. So download our app today and start your fitness journey with us!',
+          child:Text(
+'custmise your diet plan with us and get the best results. Our diet plans are designed by expert nutritionists to help you achieve your fitness goals. Whether you want to lose weight.',          
           style: GoogleFonts.roboto(
             fontSize: 15,
             color: Theme.of(context).colorScheme.tertiary,
           ),
           ),
         ),
+        SizedBox(height: 20),
+        ImageSlider(images: images),
         
   ]));
   }}

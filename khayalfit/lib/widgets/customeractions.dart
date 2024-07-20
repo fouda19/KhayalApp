@@ -27,7 +27,7 @@ class _ActionsState extends State<CustomerActions> {
   child: ElevatedButton(
     onPressed: () => {},
     child: Text(
-      'Get Started',
+      'Login',
       style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
     ),
     style: ElevatedButton.styleFrom(

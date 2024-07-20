@@ -6,8 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class ImageSlider extends StatefulWidget {
+  final List<String> images ;
   const ImageSlider({
     super.key,
+    required this.images,
+
   });
 
   @override
@@ -18,6 +21,13 @@ class _ImageSliderState extends State<ImageSlider> {
 
 @override
   Widget build(BuildContext context) {
+    List<Widget> imageWidgets = widget.images.map((path) {
+  return Image.asset(
+    path,
+    fit: BoxFit.cover,
+  );
+}).toList();
+
     var height = MediaQuery.of(context).size.height;
     return Container(child: ImageSlideshow(
 
@@ -29,20 +39,7 @@ class _ImageSliderState extends State<ImageSlider> {
           indicatorBackgroundColor: Colors.transparent,
 
      
-          children: [
-            Image.asset(
-              'assets/images/1.jpeg',
-              fit: BoxFit.cover,
-            ),
-            Image.asset(
-              'assets/images/2.jpeg',
-              fit: BoxFit.cover,
-            ),
-            Image.asset(
-              'assets/images/3.jpg',
-              fit: BoxFit.cover,
-            ),
-          ],
+          children: imageWidgets,
           disableUserScrolling: false,
      
           autoPlayInterval: 5000,
