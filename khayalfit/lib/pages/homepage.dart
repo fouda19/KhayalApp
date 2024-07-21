@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -11,7 +14,31 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
 enum QuestionType { text, radio, dropdown, multipleFields }
+
+class nutritionReport1 {
+  int proteinNormalMin;
+  int proteinNormalMax;
+  int proteinGrowthMin;
+  int proteinGrowthMax;
+  int carbsMin;
+  int carbsMax;
+  int fatsMin;
+  int fatsMax;
+  int bmr;
+
+  nutritionReport1(
+      this.proteinNormalMin,
+      this.proteinNormalMax,
+      this.proteinGrowthMin,
+      this.proteinGrowthMax,
+      this.carbsMin,
+      this.carbsMax,
+      this.fatsMin,
+      this.fatsMax,
+      this.bmr);
+}
 
 class SubQuestion {
   // for multiple questions in the same page
@@ -88,20 +115,59 @@ class _MyHomePageState extends State<MyHomePage> {
         SubQuestion("Confirm Email", QuestionType.text),
       ],
     ),
-    // Question(
-    //   "What is your age range?",
-    //   QuestionType.dropdown,
-    //   options: ["18-25", "26-35", "36-45", "46+"],
-    // ),
+    Question(
+      "What is your age range?",
+      QuestionType.dropdown,
+      options: ["18-25", "26-35", "36-45", "46+"],
+    ),
   ];
   int _currentQuestionIndex = 0;
   Map<int, dynamic> _answers = {};
   Map<int, bool> _isValid = {};
   Map<int, bool> _isEmailValid = {};
+  nutritionReport1 _rep = nutritionReport1(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+  Future<void> sendEmail() async {
+  // Replace with your SMTP server details
+  final smtpServer = SmtpServer(
+    dotenv.env['SMTP_SERVER']!,
+  port: int.parse(dotenv.env['SMTP_PORT']!),
+  username: dotenv.env['SMTP_USERNAME']!,
+  password: dotenv.env['SMTP_PASSWORD']!,
+  ignoreBadCertificate: true,
+  );
+  final message = Message()
+    ..from = Address('testingkhayalapp@outlook.com', 'khayalergy')
+    ..recipients = ['testingkhayalapp@outlook.com']
+    ..subject = 'Questionnaire Data'
+    ..text = 'Gender: ${_answers[0]}\n'
+        'Age Range: ${_answers[1]}\n'
+        'Height: ${_answers[2]} cm\n'
+        'Weight: ${_answers[3]} kg\n'
+        'Body Fat Percentage: ${_answers[4]}\n'
+        'Activity Level: ${_answers[5]}\n'
+        'Goal: ${_answers[6]}\n'
+        'First Name: ${(_answers[7] as Map)[0]}\n'
+        'Last Name: ${(_answers[7] as Map)[1]}\n'
+        'Phone Number: ${(_answers[7] as Map)[2]}\n'
+        'Email: ${(_answers[7] as Map)[3]}\n'
+        'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams\n'
+        'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams\n'
+        'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams\n'
+        'Fats Intake: ${_rep.fatsMin} - ${_rep.fatsMax} calories\n'
+        'BMR: ${_rep.bmr} calories\n';
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Message sent: ${sendReport.toString()}');
+  } on MailerException catch (e) {
+    print('Error sending email: $e');
+  }
+}
 
   void _nextQuestion() {
     //next button
-    if ((_validateCurrentQuestion() == "truetrue") || (_validateCurrentQuestion() == "truefalse")) {
+    if ((_validateCurrentQuestion() == "truetrue") ||
+        (_validateCurrentQuestion() == "truefalse")) {
       if (_currentQuestionIndex < _questions.length - 1) {
         setState(() {
           _currentQuestionIndex++;
@@ -148,27 +214,61 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _calculateReport() {
+    final weight = int.parse(_answers[3]);
+    final height = int.parse(_answers[2]);
+    //final age = int.parse(_answers[1]);
+    const age = 22; // to be removed after editing age question
+    final gender = _answers[0];
+
+    _rep.proteinGrowthMin = (weight * 1.76).toInt();
+    _rep.proteinGrowthMax = (weight * 2.2).toInt();
+    _rep.proteinNormalMin = (weight * 0.88).toInt();
+    _rep.proteinNormalMax = (weight * 1.1).toInt();
+    _rep.carbsMin = (weight * 2.2).toInt();
+    _rep.carbsMax = (weight * 3.85).toInt();
+    if (gender == "Male") {
+      _rep.bmr = (10 * weight + 6.25 * height - 5 * age + 5).toInt();
+    } else {
+      _rep.bmr = (10 * weight + 6.25 * height - 5 * age - 161).toInt();
+    }
+    //will calculate fat and assume that the daily calories intake is the same as the BMR
+    _rep.fatsMin = (_rep.bmr * 0.15).toInt();
+    _rep.fatsMax = (_rep.bmr * 0.35).toInt();
+  }
+
   void _submitAnswers() {
     // submit button
     if (_validateCurrentQuestion() == "truetrue") {
       print(_answers);
+      _calculateReport();
+      sendEmail();
+      if (_currentQuestionIndex < _questions.length) {
+        setState(() {
+          _currentQuestionIndex++;
+        });
+      }
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
       showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Thank You'),
-              content: Text('Your data has been received.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Thank You'),
+            content: Text('Your data has been received.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     } else {
       if (_validateCurrentQuestion() == "falsefalse" ||
           _validateCurrentQuestion() == "falsetrue") {
@@ -189,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
         );
-      }else{
+      } else {
         if (_validateCurrentQuestion() == "truefalse") {
           showDialog(
             context: context,
@@ -212,35 +312,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   }
-
-  // bool _validateEmailFields(int questionIndex) {
-  //   final answers = _answers[questionIndex] as Map?;
-  //   if (answers != null) {
-  //     final email = answers[0];
-  //     final confirmEmail = answers[1];
-  //     if (email != confirmEmail) {
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) {
-  //           return AlertDialog(
-  //             title: Text('Error'),
-  //             content: Text('Email and Confirm Email do not match.'),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //                 child: Text('OK'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
 
   String _validateCurrentQuestion() {
     // to check that all questions are answered
@@ -300,129 +371,179 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Questionnaire'),
-      ),
-      body: PageView.builder(
-        controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount: _questions.length,
-        itemBuilder: (context, index) {
-          final question = _questions[index];
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  question.text,
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                if (question.type == QuestionType.text)
-                  TextField(
-                    onChanged: (value) => _saveAnswer(index, value),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Your Answer',
-                    ),
+    if (_currentQuestionIndex != _questions.length - 1) {
+      return Scaffold(
+        // to show the questionnaire
+        appBar: AppBar(
+          title: Text('Questionnaire'),
+        ),
+        body: PageView.builder(
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: _questions.length,
+          itemBuilder: (context, index) {
+            final question = _questions[index];
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    question.text,
+                    style: TextStyle(fontSize: 24),
+                    textAlign: TextAlign.center,
                   ),
-                if (question.type == QuestionType.radio)
-                  ...question.options!.map((option) {
-                    return RadioListTile(
-                      title: Text(option),
-                      value: option,
-                      groupValue: _answers[index],
-                      onChanged: (value) =>
-                          setState(() => _saveAnswer(index, value)),
-                    );
-                  }).toList(),
-                if (question.type == QuestionType.dropdown)
-                  DropdownButton<String>(
-                    value: _answers[index],
-                    onChanged: (value) =>
-                        setState(() => _saveAnswer(index, value)),
-                    items: question.options!.map((String option) {
-                      return DropdownMenuItem<String>(
+                  SizedBox(height: 20),
+                  if (question.type == QuestionType.text)
+                    TextField(
+                      onChanged: (value) => _saveAnswer(index, value),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Your Answer',
+                      ),
+                    ),
+                  if (question.type == QuestionType.radio)
+                    ...question.options!.map((option) {
+                      return RadioListTile(
+                        title: Text(option),
                         value: option,
-                        child: Text(option),
+                        groupValue: _answers[index],
+                        onChanged: (value) =>
+                            setState(() => _saveAnswer(index, value)),
                       );
                     }).toList(),
-                  ),
-                if (question.type == QuestionType.multipleFields &&
-                    question.subQuestions != null)
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: question.subQuestions!.length,
-                      itemBuilder: (context, subIndex) {
-                        final subQuestion = question.subQuestions![subIndex];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                subQuestion.text,
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              SizedBox(height: 8),
-                              if (subQuestion.text ==
-                                  'Phone Number') // to make sure phone number is entered in digits only
-                                TextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  onChanged: (value) =>
-                                      _saveSubAnswer(index, subIndex, value),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: subQuestion.text,
-                                  ),
-                                )
-                              else
-                                TextField(
-                                  onChanged: (value) =>
-                                      _saveSubAnswer(index, subIndex, value),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: subQuestion.text,
-                                  ),
-                                ),
-                            ],
-                          ),
+                  if (question.type == QuestionType.dropdown)
+                    DropdownButton<String>(
+                      value: _answers[index],
+                      onChanged: (value) =>
+                          setState(() => _saveAnswer(index, value)),
+                      items: question.options!.map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
                         );
-                      },
+                      }).toList(),
                     ),
-                  ),
-                SizedBox(height: 20),
-                if (_currentQuestionIndex <
-                    _questions.length -
-                        1) // to show next button if there are more questions
-                  ElevatedButton(
-                    onPressed: _nextQuestion,
-                    child: Text('Next'),
-                  )
-                else // to show submit button if there are no more questions
-                  ElevatedButton(
-                    onPressed: _submitAnswers,
-                    child: Text('Submit'),
-                  ),
-                if (_currentQuestionIndex >
-                    0) // to show back button if there are previous questions
-                  ElevatedButton(
-                    onPressed: _previousQuestion,
-                    child: Text('Back'),
-                  ),
-              ],
+                  if (question.type == QuestionType.multipleFields &&
+                      question.subQuestions != null)
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: question.subQuestions!.length,
+                        itemBuilder: (context, subIndex) {
+                          final subQuestion = question.subQuestions![subIndex];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  subQuestion.text,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(height: 8),
+                                if (subQuestion.text ==
+                                    'Phone Number') // to make sure phone number is entered in digits only
+                                  TextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    onChanged: (value) =>
+                                        _saveSubAnswer(index, subIndex, value),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: subQuestion.text,
+                                    ),
+                                  )
+                                else
+                                  TextField(
+                                    onChanged: (value) =>
+                                        _saveSubAnswer(index, subIndex, value),
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: subQuestion.text,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  SizedBox(height: 20),
+                  if (_currentQuestionIndex <
+                      _questions.length -
+                          2) // to show next button if there are more questions
+                    ElevatedButton(
+                      onPressed: _nextQuestion,
+                      child: Text('Next'),
+                    )
+                  else if (_currentQuestionIndex !=
+                      _questions.length -
+                          1) // to show submit button if there are no more questions and not at the report page
+                    ElevatedButton(
+                      onPressed: _submitAnswers,
+                      child: Text('Submit'),
+                    ),
+                  if (_currentQuestionIndex >
+                      0) // to show back button if there are previous questions
+                    ElevatedButton(
+                      onPressed: _previousQuestion,
+                      child: Text('Back'),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      // to show the report page
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Nutrition Report'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Your Nutrition Report',
+              style: TextStyle(fontSize: 24),
+              textAlign: TextAlign.center,
             ),
-          );
-        },
-      ),
-    );
+            SizedBox(height: 20),
+            Text(
+              'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams',
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams',
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams',
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              'Fats Intake: ${_rep.fatsMin} - ${_rep.fatsMax} calories', // if bmr is not daily calories intake, then this should be changed
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              'BMR: ${_rep.bmr} calories',
+              style: TextStyle(fontSize: 18),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
