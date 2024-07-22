@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     final message = Message()
       ..from = const Address('testingkhayalapp@outlook.com', 'khayalergy')
-      ..recipients = ['testingkhayalapp@outlook.com']
+      ..recipients = ['testingkhayalapp@outlook.com', 'khayalfit@gmail.com']
       ..subject = 'Questionnaire Data'
       ..text = 'Gender: ${_answers[0]}\n'
           'Age: ${_answers[1]}\n'
