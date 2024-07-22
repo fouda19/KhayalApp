@@ -38,7 +38,7 @@ dependencies:
   flutter_image_slideshow: any
   url_launcher: ^6.0.20 
   font_awesome_flutter: ^10.7.0 
-  google_fonts: ^6.2.1
+  google_fonts: ^4.0.0
   
 
 dev_dependencies:
@@ -73,7 +73,6 @@ flutter:
     - assets/images/3.jpg
     - assets/images/4.jpg
     - assets/images/gif.gif
-    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

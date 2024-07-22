@@ -44,7 +44,7 @@ class _ActionsState extends State<CustomerActions> {
 SizedBox(height: 10,),
  SizedBox(
   width: 200,
-  height: 40, // Set your desired width here
+  height: 40,
   child: ElevatedButton(
     onPressed: () => {
       Navigator.push(

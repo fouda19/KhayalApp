@@ -29,10 +29,11 @@ class _ImageSliderState extends State<ImageSlider> {
 }).toList();
 
     var height = MediaQuery.of(context).size.height;
+    var width= MediaQuery.of(context).size.width;
     return Container(child: ImageSlideshow(
 
           width: double.infinity,
-          height: height * 0.4,
+          height:(width>600)? height*0.8:height * 0.4,
 
           initialPage: 0,
           indicatorRadius: 0,

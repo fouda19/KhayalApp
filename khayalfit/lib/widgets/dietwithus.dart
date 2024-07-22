@@ -10,6 +10,7 @@ List<String> images = [
 class DietWithUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Container(
        color: Theme.of(context).colorScheme.shadow,
       
@@ -23,7 +24,7 @@ class DietWithUs extends StatelessWidget {
               child: Text(
                 'Diet with us',
                 style: GoogleFonts.abrilFatface(
-                  fontSize: 30,
+                  fontSize: (width>600)?40:30,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
@@ -35,7 +36,7 @@ class DietWithUs extends StatelessWidget {
           child:Text(
 'custmise your diet plan with us and get the best results. Our diet plans are designed by expert nutritionists to help you achieve your fitness goals. Whether you want to lose weight.',          
           style: GoogleFonts.roboto(
-            fontSize: 15,
+            fontSize:  (width>600)?25:15,
             color: Theme.of(context).colorScheme.tertiary,
           ),
           ),

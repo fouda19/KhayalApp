@@ -30,7 +30,7 @@ class _ExploreState extends State<Explore> {
                 'MY SOCIAL MEDIA PLATFORMS',
                 style: GoogleFonts.abrilFatface
               (
-                  fontSize: 20,
+                  fontSize: (width>600)? 40:25,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),

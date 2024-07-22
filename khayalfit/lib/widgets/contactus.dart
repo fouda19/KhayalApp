@@ -15,6 +15,7 @@ class _ContactUsState extends State<ContactUs> {
   @override
   bool ishovering = false;
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Container(
         color: Theme.of(context).colorScheme.primary,
         child: Column(children: <Widget>[
@@ -25,7 +26,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Text(
                 'Contact us',
                 style: GoogleFonts.abrilFatface(
-                  fontSize: 20,
+                  fontSize: (width > 600) ? 40 : 30,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
@@ -63,7 +64,7 @@ class _ContactUsState extends State<ContactUs> {
                     child: Text(
                       'Omar_Khayal@gmail.com',
                       style: GoogleFonts.actor(
-                        fontSize: 15,
+                        fontSize: (width > 600) ? 25 : 15,
                         color:(ishovering)? Theme.of(context).colorScheme.secondary :Theme.of(context).colorScheme.tertiary,
                       ),
                       overflow: TextOverflow.ellipsis,
