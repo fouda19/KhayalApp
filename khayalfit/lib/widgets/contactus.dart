@@ -26,7 +26,7 @@ class _ContactUsState extends State<ContactUs> {
                 'Contact us',
                 style: GoogleFonts.abrilFatface(
                   fontSize: 20,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

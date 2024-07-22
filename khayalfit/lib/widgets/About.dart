@@ -4,20 +4,20 @@ class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-       color: Color.fromARGB(255, 0, 0, 0),
+       color:Theme.of(context).colorScheme.shadow,
       
       child: Column(
         children: <Widget>[
           
           Align(
-            alignment: Alignment.topLeft,
+            alignment: Alignment.center,
             child: Padding(
               padding:  EdgeInsets.only(left: 8.0),
               child: Text(
                 'About Us',
                 style: GoogleFonts.abrilFatface(
-                  fontSize: 20,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  fontSize: 30,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

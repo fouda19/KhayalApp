@@ -17,14 +17,14 @@ class ExerciseWithUs extends StatelessWidget {
         children: <Widget>[
           
           Align(
-            alignment: Alignment.topLeft,
+            alignment: Alignment.center,
             child: Padding(
               padding:  EdgeInsets.only(left: 8.0),
               child: Text(
                 'Exercise with us',
                 style: GoogleFonts.abrilFatface(
-                  fontSize: 20,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  fontSize: 30,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

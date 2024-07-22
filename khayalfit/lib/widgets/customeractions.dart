@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:khayalfit/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,17 +24,17 @@ class _ActionsState extends State<CustomerActions> {
       children: [
         SizedBox(
   width: 200,
-  height: 40, // Set your desired width here
+  height: 40, 
   child: ElevatedButton(
     onPressed: () => {},
     child: Text(
       'Login',
-      style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+      style: TextStyle(color: Theme.of(context).colorScheme.primary),
     ),
     style: ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.secondary,
     
-      textStyle: TextStyle(
+      textStyle: GoogleFonts.cardo(
         fontSize: 15,
         fontWeight: FontWeight.bold,
       ),
@@ -52,8 +53,8 @@ SizedBox(height: 10,),
       )
     },
     child: Text(
-      'BMI Calculator',
-      style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
+      'BMR Calculator',
+      style: GoogleFonts.cardo(color: Theme.of(context).colorScheme.primary),
     ),
     style: ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.secondary,

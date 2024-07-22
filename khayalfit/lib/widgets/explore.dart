@@ -23,7 +23,7 @@ class _ExploreState extends State<Explore> {
     return  Column(
         children: [
           Align(
-            alignment: Alignment.topLeft,
+            alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
@@ -31,7 +31,7 @@ class _ExploreState extends State<Explore> {
                 style: GoogleFonts.abrilFatface
               (
                   fontSize: 20,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

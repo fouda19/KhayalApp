@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Positioned(
-                bottom: 50,
+                bottom: 80,
                 left: 0,
                 right: 0,
                 child: Container(
@@ -68,12 +68,21 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       Text(
-                        'Khayalergy',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).colorScheme.tertiary,
+                        'Unleash your potential',
+                        style: GoogleFonts.pacifico(
+                          fontSize: 28,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Join Khayalergy now',
+                        style: GoogleFonts.aBeeZee(
+                          fontSize: 15,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      SizedBox(height: 20),
                       CustomerActions(),
                     ],
                   ),
