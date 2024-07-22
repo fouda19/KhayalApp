@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -16,7 +18,7 @@ class MyHomePage extends StatefulWidget {
 
 enum QuestionType { text, radio, dropdown, multipleFields }
 
-class nutritionReport1 {
+class NutritionReport1 {
   int proteinNormalMin;
   int proteinNormalMax;
   int proteinGrowthMin;
@@ -25,7 +27,7 @@ class nutritionReport1 {
   int carbsMax;
   int bmr;
 
-  nutritionReport1(
+  NutritionReport1(
       this.proteinNormalMin,
       this.proteinNormalMax,
       this.proteinGrowthMin,
@@ -110,16 +112,15 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     ),
     Question(
-      "What is your age range?",
-      QuestionType.dropdown,
-      options: ["18-25", "26-35", "36-45", "46+"],
+      "Nutrition Report",
+      QuestionType.text,
     ),
   ];
   int _currentQuestionIndex = 0;
-  Map<int, dynamic> _answers = {};
-  Map<int, bool> _isValid = {};
-  Map<int, bool> _isEmailValid = {};
-  nutritionReport1 _rep = nutritionReport1(0, 0, 0, 0, 0, 0, 0);
+  final Map<int, dynamic> _answers = {};
+  final Map<int, bool> _isValid = {};
+  final Map<int, bool> _isEmailValid = {};
+  final NutritionReport1 _rep = NutritionReport1(0, 0, 0, 0, 0, 0, 0);
 
   Future<void> sendEmail() async {
     final smtpServer = SmtpServer(
@@ -166,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _currentQuestionIndex++;
         });
         _pageController.nextPage(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -177,14 +178,18 @@ class _MyHomePageState extends State<MyHomePage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Alert'),
-              content: Text('Please fill in all the fields.'),
+              title: const Text('Alert'),
+              content: const Text('Please fill in all the fields.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.secondary),
+                  ),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -201,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _currentQuestionIndex--;
       });
       _pageController.previousPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     }
@@ -238,21 +243,25 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
       _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Thank You'),
-            content: Text('Your data has been received.'),
+            title: const Text('Thank You'),
+            content: const Text('Your data has been received.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all<Color>(
+                      Theme.of(context).colorScheme.secondary),
+                ),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -265,14 +274,18 @@ class _MyHomePageState extends State<MyHomePage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Alert'),
-              content: Text('Please fill in all the fields.'),
+              title: const Text('Alert'),
+              content: const Text('Please fill in all the fields.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all<Color>(
+                        Theme.of(context).colorScheme.secondary),
+                  ),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -284,14 +297,18 @@ class _MyHomePageState extends State<MyHomePage> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Alert'),
-                content: Text('Email and Confirm Email do not match.'),
+                title: const Text('Alert'),
+                content: const Text('Email and Confirm Email do not match.'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('OK'),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                          Theme.of(context).colorScheme.secondary),
+                    ),
+                    child: const Text('OK'),
                   ),
                 ],
               );
@@ -364,11 +381,11 @@ class _MyHomePageState extends State<MyHomePage> {
       return Scaffold(
         // to show the questionnaire
         appBar: AppBar(
-          title: Text('Questionnaire'),
+          title: const Text('Questionnaire'),
         ),
         body: PageView.builder(
           controller: _pageController,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: _questions.length,
           itemBuilder: (context, index) {
             final question = _questions[index];
@@ -380,42 +397,48 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Text(
                     question.text,
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (question.type == QuestionType.text)
                     TextField(
                       onChanged: (value) => _saveAnswer(index, value),
                       keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
                         labelText: 'Your Answer',
+                        hintStyle: const TextStyle(color: Colors.black),
                       ),
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   if (question.type == QuestionType.radio)
                     ...question.options!.map((option) {
                       return RadioListTile(
                         title: Text(option),
                         value: option,
+                        activeColor: Colors.black,
                         groupValue: _answers[index],
                         onChanged: (value) =>
                             setState(() => _saveAnswer(index, value)),
                       );
+                      // ignore: unnecessary_to_list_in_spreads
                     }).toList(),
-                  if (question.type == QuestionType.dropdown)
-                    DropdownButton<String>(
-                      value: _answers[index],
-                      onChanged: (value) =>
-                          setState(() => _saveAnswer(index, value)),
-                      items: question.options!.map((String option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        );
-                      }).toList(),
-                    ),
+                  // if (question.type == QuestionType.dropdown)
+                  //   DropdownButton<String>(
+                  //     value: _answers[index],
+                  //     onChanged: (value) =>
+                  //         setState(() => _saveAnswer(index, value)),
+                  //     items: question.options!.map((String option) {
+                  //       return DropdownMenuItem<String>(
+                  //         value: option,
+                  //         child: Text(option),
+                  //       );
+                  //     }).toList(),
+                  //   ),
                   if (question.type == QuestionType.multipleFields &&
                       question.subQuestions != null)
                     Expanded(
@@ -430,9 +453,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: [
                                 Text(
                                   subQuestion.text,
-                                  style: TextStyle(fontSize: 18),
+                                  style: const TextStyle(fontSize: 18),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 if (subQuestion.text ==
                                     'Phone Number') // to make sure phone number is entered in digits only
                                   TextField(
@@ -442,7 +465,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onChanged: (value) =>
                                         _saveSubAnswer(index, subIndex, value),
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0)),
                                       labelText: subQuestion.text,
                                     ),
                                   )
@@ -451,7 +476,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onChanged: (value) =>
                                         _saveSubAnswer(index, subIndex, value),
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0)),
                                       labelText: subQuestion.text,
                                     ),
                                   ),
@@ -461,26 +488,38 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (_currentQuestionIndex <
                       _questions.length -
                           2) // to show next button if there are more questions
                     ElevatedButton(
                       onPressed: _nextQuestion,
-                      child: Text('Next'),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
+                      child: const Text('Next'),
                     )
                   else if (_currentQuestionIndex !=
                       _questions.length -
                           1) // to show submit button if there are no more questions and not at the report page
                     ElevatedButton(
                       onPressed: _submitAnswers,
-                      child: Text('Submit'),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
+                      child: const Text('Submit'),
                     ),
                   if (_currentQuestionIndex >
                       0) // to show back button if there are previous questions
                     ElevatedButton(
                       onPressed: _previousQuestion,
-                      child: Text('Back'),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
+                      child: const Text('Back'),
                     ),
                 ],
               ),
@@ -492,43 +531,47 @@ class _MyHomePageState extends State<MyHomePage> {
       // to show the report page
       return Scaffold(
         appBar: AppBar(
-          title: Text('Nutrition Report'),
+          title: const Text('Nutrition Report'),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               'Your Nutrition Report',
               style: TextStyle(fontSize: 24),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Text(
               'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             Text(
               'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
-            Text(
+            const Text(
               'Fats Intake: 15% - 35% of daily calories intake',
               style: TextStyle(fontSize: 18),
             ),
             Text(
               'BMR: ${_rep.bmr} calories',
-              style: TextStyle(fontSize: 18),
+              style: const TextStyle(fontSize: 18),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.secondary),
+              ),
+              child: const Text('OK'),
             ),
           ],
         ),
