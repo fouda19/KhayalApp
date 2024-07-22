@@ -14,7 +14,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-
 enum QuestionType { text, radio, dropdown, multipleFields }
 
 class nutritionReport1 {
@@ -24,8 +23,6 @@ class nutritionReport1 {
   int proteinGrowthMax;
   int carbsMin;
   int carbsMax;
-  int fatsMin;
-  int fatsMax;
   int bmr;
 
   nutritionReport1(
@@ -35,8 +32,6 @@ class nutritionReport1 {
       this.proteinGrowthMax,
       this.carbsMin,
       this.carbsMax,
-      this.fatsMin,
-      this.fatsMax,
       this.bmr);
 }
 
@@ -68,9 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
       options: ["Male", "Female"],
     ),
     Question(
-      "What is your age range?",
-      QuestionType.radio,
-      options: ["18-23", "24-29", "30-35", "36-41", "42-47", "48-53", "54+"],
+      "How old are you?",
+      QuestionType.text,
     ),
     Question(
       "What is your height? (in cm)",
@@ -125,44 +119,43 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<int, dynamic> _answers = {};
   Map<int, bool> _isValid = {};
   Map<int, bool> _isEmailValid = {};
-  nutritionReport1 _rep = nutritionReport1(0, 0, 0, 0, 0, 0, 0, 0, 0);
+  nutritionReport1 _rep = nutritionReport1(0, 0, 0, 0, 0, 0, 0);
 
   Future<void> sendEmail() async {
-  // Replace with your SMTP server details
-  final smtpServer = SmtpServer(
-    dotenv.env['SMTP_SERVER']!,
-  port: int.parse(dotenv.env['SMTP_PORT']!),
-  username: dotenv.env['SMTP_USERNAME']!,
-  password: dotenv.env['SMTP_PASSWORD']!,
-  ignoreBadCertificate: true,
-  );
-  final message = Message()
-    ..from = Address('testingkhayalapp@outlook.com', 'khayalergy')
-    ..recipients = ['testingkhayalapp@outlook.com']
-    ..subject = 'Questionnaire Data'
-    ..text = 'Gender: ${_answers[0]}\n'
-        'Age Range: ${_answers[1]}\n'
-        'Height: ${_answers[2]} cm\n'
-        'Weight: ${_answers[3]} kg\n'
-        'Body Fat Percentage: ${_answers[4]}\n'
-        'Activity Level: ${_answers[5]}\n'
-        'Goal: ${_answers[6]}\n'
-        'First Name: ${(_answers[7] as Map)[0]}\n'
-        'Last Name: ${(_answers[7] as Map)[1]}\n'
-        'Phone Number: ${(_answers[7] as Map)[2]}\n'
-        'Email: ${(_answers[7] as Map)[3]}\n'
-        'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams\n'
-        'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams\n'
-        'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams\n'
-        'Fats Intake: ${_rep.fatsMin} - ${_rep.fatsMax} calories\n'
-        'BMR: ${_rep.bmr} calories\n';
-  try {
-    final sendReport = await send(message, smtpServer);
-    print('Message sent: ${sendReport.toString()}');
-  } on MailerException catch (e) {
-    print('Error sending email: $e');
+    final smtpServer = SmtpServer(
+      dotenv.env['SMTP_SERVER']!,
+      port: int.parse(dotenv.env['SMTP_PORT']!),
+      username: dotenv.env['SMTP_USERNAME']!,
+      password: dotenv.env['SMTP_PASSWORD']!,
+      ignoreBadCertificate: true,
+    );
+    final message = Message()
+      ..from = const Address('testingkhayalapp@outlook.com', 'khayalergy')
+      ..recipients = ['testingkhayalapp@outlook.com']
+      ..subject = 'Questionnaire Data'
+      ..text = 'Gender: ${_answers[0]}\n'
+          'Age: ${_answers[1]}\n'
+          'Height: ${_answers[2]} cm\n'
+          'Weight: ${_answers[3]} kg\n'
+          'Body Fat Percentage: ${_answers[4]}\n'
+          'Activity Level: ${_answers[5]}\n'
+          'Goal: ${_answers[6]}\n'
+          'First Name: ${(_answers[7] as Map)[0]}\n'
+          'Last Name: ${(_answers[7] as Map)[1]}\n'
+          'Phone Number: ${(_answers[7] as Map)[2]}\n'
+          'Email: ${(_answers[7] as Map)[3]}\n'
+          'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams\n'
+          'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams\n'
+          'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams\n'
+          'Fats Intake: 15% - 35% of daily calories intake\n'
+          'BMR: ${_rep.bmr} calories\n';
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ${sendReport.toString()}');
+    } on MailerException catch (e) {
+      print('Error sending email: $e');
+    }
   }
-}
 
   void _nextQuestion() {
     //next button
@@ -217,8 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _calculateReport() {
     final weight = int.parse(_answers[3]);
     final height = int.parse(_answers[2]);
-    //final age = int.parse(_answers[1]);
-    const age = 22; // to be removed after editing age question
+    final age = int.parse(_answers[1]);
     final gender = _answers[0];
 
     _rep.proteinGrowthMin = (weight * 1.76).toInt();
@@ -232,9 +224,6 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       _rep.bmr = (10 * weight + 6.25 * height - 5 * age - 161).toInt();
     }
-    //will calculate fat and assume that the daily calories intake is the same as the BMR
-    _rep.fatsMin = (_rep.bmr * 0.15).toInt();
-    _rep.fatsMax = (_rep.bmr * 0.35).toInt();
   }
 
   void _submitAnswers() {
@@ -528,7 +517,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(fontSize: 18),
             ),
             Text(
-              'Fats Intake: ${_rep.fatsMin} - ${_rep.fatsMax} calories', // if bmr is not daily calories intake, then this should be changed
+              'Fats Intake: 15% - 35% of daily calories intake',
               style: TextStyle(fontSize: 18),
             ),
             Text(

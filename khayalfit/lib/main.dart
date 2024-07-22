@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 //import 'package:khayalfit/pages/homepage.dart';
 import 'package:khayalfit/pages/welcome.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

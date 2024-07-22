@@ -52,7 +52,7 @@ SizedBox(height: 10,),
       )
     },
     child: Text(
-      'BMI Calculator',
+      'BMR Calculator',
       style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
     ),
     style: ElevatedButton.styleFrom(
