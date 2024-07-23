@@ -151,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'Fats Intake: 15% - 35% of daily calories intake\n'
           'BMR: ${_rep.bmr} calories\n';
     try {
+    print('henaaa');
       final sendReport = await send(message, smtpServer);
       print('Message sent: ${sendReport.toString()}');
     } on MailerException catch (e) {
@@ -160,6 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _nextQuestion() {
     //next button
+        print(dotenv.env);
     if ((_validateCurrentQuestion() == "truetrue") ||
         (_validateCurrentQuestion() == "truefalse")) {
       if (_currentQuestionIndex < _questions.length - 1) {
@@ -186,8 +188,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.secondary),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).colorScheme.secondary),
                   ),
                   child: const Text('OK'),
                 ),
@@ -258,8 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.secondary),
+                  backgroundColor: MaterialStateColor.resolveWith(
+                      (states) => Theme.of(context).colorScheme.secondary),
                 ),
                 child: const Text('OK'),
               ),
@@ -282,8 +284,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.secondary),
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).colorScheme.secondary),
                   ),
                   child: const Text('OK'),
                 ),
@@ -305,8 +307,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.of(context).pop();
                     },
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          Theme.of(context).colorScheme.secondary),
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).colorScheme.secondary),
                     ),
                     child: const Text('OK'),
                   ),
@@ -495,8 +497,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ElevatedButton(
                       onPressed: _nextQuestion,
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.secondary),
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => Theme.of(context).colorScheme.secondary),
                       ),
                       child: const Text('Next'),
                     )
@@ -506,8 +508,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ElevatedButton(
                       onPressed: _submitAnswers,
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.secondary),
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => Theme.of(context).colorScheme.secondary),
                       ),
                       child: const Text('Submit'),
                     ),
@@ -516,8 +518,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     ElevatedButton(
                       onPressed: _previousQuestion,
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                            Theme.of(context).colorScheme.secondary),
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => Theme.of(context).colorScheme.secondary),
                       ),
                       child: const Text('Back'),
                     ),
@@ -568,8 +570,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
               },
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(
-                    Theme.of(context).colorScheme.secondary),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Theme.of(context).colorScheme.secondary),
               ),
               child: const Text('OK'),
             ),

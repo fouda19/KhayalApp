@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
        
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
-        primary: Color.fromARGB(255, 200, 200, 200),
-        secondary: Color.fromARGB(255, 215, 10, 10), 
-        tertiary: Color.fromARGB(255, 23, 23, 23),
-        shadow: Color.fromARGB(255, 212, 207, 207),
+        primary: Color.fromARGB(255, 0, 0, 0),
+        secondary: Color.fromARGB(255, 65, 12, 81), 
+        tertiary: Color.fromARGB(255, 240, 236, 236),
+        shadow: Color.fromARGB(255, 0, 0, 0),
         
         ),
         useMaterial3: true,

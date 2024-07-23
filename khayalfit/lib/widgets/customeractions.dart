@@ -29,7 +29,7 @@ class _ActionsState extends State<CustomerActions> {
     onPressed: () => {},
     child: Text(
       'Login',
-      style: TextStyle(color: Theme.of(context).colorScheme.primary),
+      style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
     ),
     style: ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -52,9 +52,22 @@ SizedBox(height: 10,),
         MaterialPageRoute(builder: (context) => MyHomePage()),
       )
     },
-    child: Text(
-      'BMR Calculator',
-      style: GoogleFonts.cardo(color: Theme.of(context).colorScheme.primary),
+    child: Center(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+            Text(
+            'BMR',
+            style: GoogleFonts.abel(color:Color.fromARGB(221, 0, 0, 0)),
+          ),
+          SizedBox(width: 6,),
+          Text(
+            'Calculator',
+            style: GoogleFonts.abel(color: Theme.of(context).colorScheme.tertiary),
+          ),
+        ],
+      ),
     ),
     style: ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.secondary,

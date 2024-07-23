@@ -27,7 +27,7 @@ class _ExploreState extends State<Explore> {
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
-                'MY SOCIAL MEDIA PLATFORMS',
+                'SOCIAL MEDIA PLATFORMS',
                 style: GoogleFonts.abrilFatface
               (
                   fontSize: (width>600)? 40:25,

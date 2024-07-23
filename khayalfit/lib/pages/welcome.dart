@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                         'Unleash your potential',
                         style: GoogleFonts.pacifico(
                           fontSize: 28,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                       SizedBox(height: 10),
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                         'Join Khayalergy now',
                         style: GoogleFonts.aBeeZee(
                           fontSize: 15,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                       SizedBox(height: 20),
