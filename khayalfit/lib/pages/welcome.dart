@@ -55,8 +55,8 @@ class _HomePageState extends State<HomePage> {
                 height: height * 0.9,
                 width: width,
                 child: Image.asset(
-                  'assets/images/gif.gif',
-                  fit: BoxFit.cover,
+                  'assets/images/khayal.gif',
+                  fit:(width>600)? BoxFit.contain:BoxFit.cover,
                 ),
               ),
               Positioned(

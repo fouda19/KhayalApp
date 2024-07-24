@@ -28,13 +28,13 @@ class _ActionsState extends State<CustomerActions> {
   child: ElevatedButton(
     onPressed: () => {},
     child: Text(
-      'Login',
+      'Join now',
       style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
     ),
     style: ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.secondary,
     
-      textStyle: GoogleFonts.cardo(
+      textStyle: GoogleFonts.abel(
         fontSize: 15,
         fontWeight: FontWeight.bold,
       ),

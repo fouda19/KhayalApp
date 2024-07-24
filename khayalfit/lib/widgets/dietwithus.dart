@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khayalfit/widgets/imageslider.dart';
 List<String> images = [
-  'assets/images/1.jpeg',
-  'assets/images/2.jpeg',
-  'assets/images/3.jpg',
-  'assets/images/4.jpg',
+  'assets/images/khayal1.jpg',
+  'assets/images/khayal2.jpg',
+  'assets/images/khayal3.jpg',
+  'assets/images/khayal4.jpg',
+  'assets/images/khayal5.jpg',
 ];
 class DietWithUs extends StatelessWidget {
   @override

@@ -60,7 +60,7 @@ class _ExploreState extends State<Explore> {
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                         SizedBox(height: 5),
-                       (width>300)? Text('Follow my Instagram',
+                       (width>300)? Text('Omar_khayal',
                             style: GoogleFonts.pacifico(
                               fontSize: 12,
                               color: Theme.of(context).colorScheme.tertiary,

@@ -24,7 +24,7 @@ class _ImageSliderState extends State<ImageSlider> {
     List<Widget> imageWidgets = widget.images.map((path) {
   return Image.asset(
     path,
-    fit: BoxFit.cover,
+    fit: BoxFit.contain,
   );
 }).toList();
 
@@ -33,7 +33,8 @@ class _ImageSliderState extends State<ImageSlider> {
     return Container(child: ImageSlideshow(
 
           width: double.infinity,
-          height:(width>600)? height*0.8:height * 0.4,
+          height:(width>600)? height*0.8:height * 0.6,
+        
 
           initialPage: 0,
           indicatorRadius: 0,
