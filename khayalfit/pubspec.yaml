@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.0.20 
   font_awesome_flutter: ^10.7.0 
   google_fonts: ^4.0.0
+  emailjs: ^4.0.0
   
 
 dev_dependencies:
@@ -75,6 +76,7 @@ flutter:
     - assets/images/khayal5.jpg
     - assets/images/khayal.gif
     - assets/.env
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,11 +1,13 @@
-// ignore_for_file: depend_on_referenced_packages, avoid_print
+// ignore_for_file: depend_on_referenced_packages, avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// ignore: unnecessary_import
 import 'package:flutter/widgets.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:emailjs/emailjs.dart' as emailjs;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -121,47 +123,87 @@ class _MyHomePageState extends State<MyHomePage> {
   final Map<int, bool> _isValid = {};
   final Map<int, bool> _isEmailValid = {};
   final NutritionReport1 _rep = NutritionReport1(0, 0, 0, 0, 0, 0, 0);
+  int flag = 0;
 
   Future<void> sendEmail() async {
-    final smtpServer = SmtpServer(
-      dotenv.env['SMTP_SERVER']!,
-      port: int.parse(dotenv.env['SMTP_PORT']!),
-      username: dotenv.env['SMTP_USERNAME']!,
-      password: dotenv.env['SMTP_PASSWORD']!,
-      ignoreBadCertificate: true,
-    );
-    final message = Message()
-      ..from = const Address('testingkhayalapp@outlook.com', 'khayalergy')
-      ..recipients = ['testingkhayalapp@outlook.com', 'khayalfit@gmail.com']
-      ..subject = 'Questionnaire Data'
-      ..text = 'Gender: ${_answers[0]}\n'
-          'Age: ${_answers[1]}\n'
-          'Height: ${_answers[2]} cm\n'
-          'Weight: ${_answers[3]} kg\n'
-          'Body Fat Percentage: ${_answers[4]}\n'
-          'Activity Level: ${_answers[5]}\n'
-          'Goal: ${_answers[6]}\n'
-          'First Name: ${(_answers[7] as Map)[0]}\n'
-          'Last Name: ${(_answers[7] as Map)[1]}\n'
-          'Phone Number: ${(_answers[7] as Map)[2]}\n'
-          'Email: ${(_answers[7] as Map)[3]}\n'
-          'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams\n'
-          'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams\n'
-          'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams\n'
-          'Fats Intake: 15% - 35% of daily calories intake\n'
-          'BMR: ${_rep.bmr} calories\n';
+    Map<String, dynamic> templateParams = {
+      'gender': _answers[0],
+      'age': _answers[1],
+      'height': _answers[2],
+      'weight': _answers[3],
+      'fat': _answers[4],
+      'activity': _answers[5],
+      'goal': _answers[6],
+      'firstName': (_answers[7] as Map)[0],
+      'lastName': (_answers[7] as Map)[1],
+      'phone': (_answers[7] as Map)[2],
+      'email': (_answers[7] as Map)[3],
+      'proteinNormalMin': _rep.proteinNormalMin,
+      'proteinNormalMax': _rep.proteinNormalMax,
+      'proteinGrowthMin': _rep.proteinGrowthMin,
+      'proteinGrowthMax': _rep.proteinGrowthMax,
+      'carbsMin': _rep.carbsMin,
+      'carbsMax': _rep.carbsMax,
+      'bmr': _rep.bmr,
+    };
+
     try {
-    print('henaaa');
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: ${sendReport.toString()}');
-    } on MailerException catch (e) {
-      print('Error sending email: $e');
+      await emailjs.send(
+        'khayalfit',
+        'khayalfit',
+        templateParams,
+        emailjs.Options(
+          publicKey: 'PXoai66gXALOP5zUd',
+          privateKey: dotenv.env['PRIVATE_KEY']!,
+        ),
+      );
+      print('SUCCESS!');
+      flag = 1;
+    } catch (error) {
+      print('$error');
+      flag = 2;
     }
   }
 
+  // Future<void> sendEmail() async {
+  //   final smtpServer = SmtpServer(
+  //     dotenv.env['SMTP_SERVER']!,
+  //     port: int.parse(dotenv.env['SMTP_PORT']!),
+  //     username: dotenv.env['SMTP_USERNAME']!,
+  //     password: dotenv.env['SMTP_PASSWORD']!,
+  //   );
+  //   final message = Message()
+  //     ..from = const Address('testerkhayalapp@outlook.com', 'khayalergy')
+  //     ..recipients = [ 'khayalfit@gmail.com', 'testerkhayalapp@outlook.com']
+  //     ..subject = 'Questionnaire Data'
+  //     ..text = 'Gender: ${_answers[0]}\n'
+  //         'Age: ${_answers[1]}\n'
+  //         'Height: ${_answers[2]} cm\n'
+  //         'Weight: ${_answers[3]} kg\n'
+  //         'Body Fat Percentage: ${_answers[4]}\n'
+  //         'Activity Level: ${_answers[5]}\n'
+  //         'Goal: ${_answers[6]}\n'
+  //         'First Name: ${(_answers[7] as Map)[0]}\n'
+  //         'Last Name: ${(_answers[7] as Map)[1]}\n'
+  //         'Phone Number: ${(_answers[7] as Map)[2]}\n'
+  //         'Email: ${(_answers[7] as Map)[3]}\n'
+  //         'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams\n'
+  //         'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams\n'
+  //         'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams\n'
+  //         'Fats Intake: 15% - 35% of daily calories intake\n'
+  //         'BMR: ${_rep.bmr} calories\n';
+  //   try {
+  //     final sendReport = await send(message, smtpServer);
+  //     print('Message sent: ${sendReport.toString()}');
+  //     flag = 1;
+  //   } on MailerException catch (e) {
+  //     flag = 2;
+  //     print('Error sending email: ${e.message}');
+  //   }
+  // }
+
   void _nextQuestion() {
     //next button
-        print(dotenv.env);
     if ((_validateCurrentQuestion() == "truetrue") ||
         (_validateCurrentQuestion() == "truefalse")) {
       if (_currentQuestionIndex < _questions.length - 1) {
@@ -236,39 +278,44 @@ class _MyHomePageState extends State<MyHomePage> {
   void _submitAnswers() {
     // submit button
     if (_validateCurrentQuestion() == "truetrue") {
-      print(_answers);
       _calculateReport();
-      sendEmail();
-      if (_currentQuestionIndex < _questions.length) {
-        setState(() {
-          _currentQuestionIndex++;
-        });
-      }
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Thank You'),
-            content: const Text('Your data has been received.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => Theme.of(context).colorScheme.secondary),
+      //sendEmail();
+      //sendEmail is commented as there is a monthly qouta for the emails provided by EmailJS
+      if /*(flag == 1)*/(true) {
+        print(_answers);
+        if (_currentQuestionIndex < _questions.length) {
+          setState(() {
+            _currentQuestionIndex++;
+          });
+        }
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Thank You'),
+              content: const Text('Your data has been received.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => Theme.of(context).colorScheme.secondary),
+                  ),
+                  child: const Text('OK'),
                 ),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+              ],
+            );
+          },
+        );
+      }else {
+        print('Error sending email!!');
+      }
     } else {
       if (_validateCurrentQuestion() == "falsefalse" ||
           _validateCurrentQuestion() == "falsetrue") {
@@ -377,205 +424,294 @@ class _MyHomePageState extends State<MyHomePage> {
     (_answers[questionIndex] as Map)[subQuestionIndex] = answer;
   }
 
+  Widget _buildDecoratedText(String text, {bool isStatic = false}) {
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 4.0),
+    padding: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [
+          Color.fromARGB(255, 156, 151, 151),
+          Color.fromARGB(255, 200, 200, 200),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(15.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.5),
+          spreadRadius: 2,
+          blurRadius: 5,
+          offset: const Offset(0, 3),
+        ),
+      ],
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(fontSize: 18),
+    ),
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     if (_currentQuestionIndex != _questions.length - 1) {
       return Scaffold(
-        // to show the questionnaire
         appBar: AppBar(
           title: const Text('Questionnaire'),
         ),
-        body: PageView.builder(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _questions.length,
-          itemBuilder: (context, index) {
-            final question = _questions[index];
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    question.text,
-                    style: const TextStyle(fontSize: 24),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  if (question.type == QuestionType.text)
-                    TextField(
-                      onChanged: (value) => _saveAnswer(index, value),
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        fillColor: const Color.fromARGB(255, 255, 255, 255),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        labelText: 'Your Answer',
-                        hintStyle: const TextStyle(color: Colors.black),
-                      ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            constraints: const BoxConstraints(
+              maxWidth: 500,
+              maxHeight: 450,
+            ),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 0, 153,
+                  255),
+              borderRadius: BorderRadius.circular(
+                  20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey
+                      .withOpacity(0.5), // add a shadow effect
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: PageView.builder(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _questions.length,
+              itemBuilder: (context, index) {
+                final question = _questions[index];
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      question.text,
+                      style: const TextStyle(fontSize: 24),
+                      textAlign: TextAlign.center,
                     ),
-                  if (question.type == QuestionType.radio)
-                    ...question.options!.map((option) {
-                      return RadioListTile(
-                        title: Text(option),
-                        value: option,
-                        activeColor: Colors.black,
-                        groupValue: _answers[index],
-                        onChanged: (value) =>
-                            setState(() => _saveAnswer(index, value)),
-                      );
-                      // ignore: unnecessary_to_list_in_spreads
-                    }).toList(),
-                  // if (question.type == QuestionType.dropdown)
-                  //   DropdownButton<String>(
-                  //     value: _answers[index],
-                  //     onChanged: (value) =>
-                  //         setState(() => _saveAnswer(index, value)),
-                  //     items: question.options!.map((String option) {
-                  //       return DropdownMenuItem<String>(
-                  //         value: option,
-                  //         child: Text(option),
-                  //       );
-                  //     }).toList(),
-                  //   ),
-                  if (question.type == QuestionType.multipleFields &&
-                      question.subQuestions != null)
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: question.subQuestions!.length,
-                        itemBuilder: (context, subIndex) {
-                          final subQuestion = question.subQuestions![subIndex];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  subQuestion.text,
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                const SizedBox(height: 8),
-                                if (subQuestion.text ==
-                                    'Phone Number') // to make sure phone number is entered in digits only
-                                  TextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    onChanged: (value) =>
-                                        _saveSubAnswer(index, subIndex, value),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0)),
-                                      labelText: subQuestion.text,
-                                    ),
-                                  )
-                                else
-                                  TextField(
-                                    onChanged: (value) =>
-                                        _saveSubAnswer(index, subIndex, value),
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0)),
-                                      labelText: subQuestion.text,
-                                    ),
+                    const SizedBox(height: 20),
+                    if (question.type == QuestionType.text)
+                      TextField(
+                        onChanged: (value) => _saveAnswer(index, value),
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          fillColor: const Color.fromARGB(255, 255, 255, 255),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          labelText: 'Your Answer',
+                          hintStyle: const TextStyle(color: Colors.black),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                      ),
+                    if (question.type == QuestionType.radio)
+                      ...question.options!.map((option) {
+                        return RadioListTile(
+                          title: Text(option),
+                          value: option,
+                          activeColor: Colors.black,
+                          groupValue: _answers[index],
+                          onChanged: (value) =>
+                              setState(() => _saveAnswer(index, value)),
+                        );
+                        // ignore: unnecessary_to_list_in_spreads
+                      }).toList(),
+                    if (question.type == QuestionType.multipleFields &&
+                        question.subQuestions != null)
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: question.subQuestions!.length,
+                          itemBuilder: (context, subIndex) {
+                            final subQuestion =
+                                question.subQuestions![subIndex];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    subQuestion.text,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
-                              ],
+                                  const SizedBox(height: 8),
+                                  if (subQuestion.text == 'Phone Number')
+                                    TextField(
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      onChanged: (value) => _saveSubAnswer(
+                                          index, subIndex, value),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0)),
+                                        labelText: subQuestion.text,
+                                      ),
+                                    )
+                                  else
+                                    TextField(
+                                      onChanged: (value) => _saveSubAnswer(
+                                          index, subIndex, value),
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0)),
+                                        labelText: subQuestion.text,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        if (_currentQuestionIndex > 0 &&
+                            _currentQuestionIndex < _questions.length - 2)
+                          Center(
+                            child: SizedBox(
+                              width: 150,
+                              height: 40,
+                              child: ElevatedButton(
+                                onPressed: _previousQuestion,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          const Color.fromARGB(
+                                              255, 200, 90, 90)),
+                                  minimumSize: const Size(150, 40),
+                                  maximumSize: const Size(150, 40),
+                                ),
+                                child: const Text('Back'),
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  const SizedBox(height: 20),
-                  if (_currentQuestionIndex <
-                      _questions.length -
-                          2) // to show next button if there are more questions
-                    ElevatedButton(
-                      onPressed: _nextQuestion,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Theme.of(context).colorScheme.secondary),
-                      ),
-                      child: const Text('Next'),
+                          )
+                        else if (_currentQuestionIndex == _questions.length - 2)
+                          Center(
+                            child: SizedBox(
+                              width: 150, 
+                              height: 40,
+                              child: ElevatedButton(
+                                onPressed: _submitAnswers,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          const Color.fromARGB(
+                                              255, 200, 90, 90)),
+                                  minimumSize: const Size(150, 40),
+                                  maximumSize: const Size(150, 40),
+                                ),
+                                child: const Text('Submit'),
+                              ),
+                            ),
+                          ),
+                        if (_currentQuestionIndex < _questions.length - 2)
+                          Center(
+                            child: SizedBox(
+                              width: 150, // Set your desired width
+                              height: 40, // Set your desired height
+                              child: ElevatedButton(
+                                onPressed: _nextQuestion,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      MaterialStateColor.resolveWith((states) =>
+                                          const Color.fromARGB(
+                                              255, 200, 90, 90)),
+                                  minimumSize: const Size(150, 40),
+                                  maximumSize: const Size(150, 40),
+                                ),
+                                child: const Text('Next'),
+                              ),
+                            ),
+                          )
+                      ],
                     )
-                  else if (_currentQuestionIndex !=
-                      _questions.length -
-                          1) // to show submit button if there are no more questions and not at the report page
-                    ElevatedButton(
-                      onPressed: _submitAnswers,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Theme.of(context).colorScheme.secondary),
-                      ),
-                      child: const Text('Submit'),
-                    ),
-                  if (_currentQuestionIndex >
-                      0) // to show back button if there are previous questions
-                    ElevatedButton(
-                      onPressed: _previousQuestion,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Theme.of(context).colorScheme.secondary),
-                      ),
-                      child: const Text('Back'),
-                    ),
-                ],
-              ),
-            );
-          },
+                  ],
+                );
+              },
+            ),
+          ),
         ),
       );
     } else {
-      // to show the report page
       return Scaffold(
         appBar: AppBar(
           title: const Text('Nutrition Report'),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Your Nutrition Report',
-              style: TextStyle(fontSize: 24),
-              textAlign: TextAlign.center,
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            constraints: const BoxConstraints(
+              maxWidth: 500,
+              maxHeight: 450,
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams',
-              style: const TextStyle(fontSize: 18),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 0, 153,
+                  255),
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            Text(
-              'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams',
-              style: const TextStyle(fontSize: 18),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Your Nutrition Report',
+                  style: TextStyle(fontSize: 24),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                 _buildDecoratedText(
+              'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams'),
+          _buildDecoratedText(
+              'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams'),
+          _buildDecoratedText(
+              'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams'),
+          _buildDecoratedText(
+              'Fats Intake: 15% - 35% of daily calories intake', isStatic: true),
+          _buildDecoratedText('BMR: ${_rep.bmr} calories'),
+                Center(
+                  child: SizedBox(
+                    width: 120, // Set your desired width
+                    height: 40, // Set your desired height
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                            (states) => const Color.fromARGB(255, 200, 90, 90)),
+                        minimumSize: const Size(120, 40),
+                        maximumSize: const Size(120, 40),
+                      ),
+                      child: const Text('OK'),
+                    ),
+                  ),
+                )
+              ],
             ),
-            Text(
-              'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const Text(
-              'Fats Intake: 15% - 35% of daily calories intake',
-              style: TextStyle(fontSize: 18),
-            ),
-            Text(
-              'BMR: ${_rep.bmr} calories',
-              style: const TextStyle(fontSize: 18),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Theme.of(context).colorScheme.secondary),
-              ),
-              child: const Text('OK'),
-            ),
-          ],
+          ),
         ),
       );
     }

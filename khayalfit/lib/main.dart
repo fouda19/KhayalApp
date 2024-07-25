@@ -10,7 +10,7 @@ Future<void> main() async {
   } catch (e) {
     print('Error loading dotenv: $e');
   }
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
        
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
-        primary: Color.fromARGB(255, 0, 0, 0),
-        secondary: Color.fromARGB(255, 65, 12, 81), 
-        tertiary: Color.fromARGB(255, 240, 236, 236),
-        shadow: Color.fromARGB(255, 0, 0, 0),
+        primary: const Color.fromARGB(255, 0, 0, 0),
+        secondary: const Color.fromARGB(255, 65, 12, 81), 
+        tertiary: const Color.fromARGB(255, 240, 236, 236),
+        shadow: const Color.fromARGB(255, 0, 0, 0),
         
         ),
         useMaterial3: true,
