@@ -76,7 +76,7 @@ class _ExploreState extends State<Explore> {
               ),
               GestureDetector(
                 onTap: () async {
-                  Uri url = Uri.https('www.instagram.com', '/omar_khayal/');
+                  Uri url = Uri.https('www.tiktok.com', '/@khayalergy');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url);
                   } else {
@@ -95,7 +95,7 @@ class _ExploreState extends State<Explore> {
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                         SizedBox(height: 5),
-                      (width>300)? Text('Follow my Tiktok',
+                      (width>300)? Text('Khayalergy',
                             style: GoogleFonts.pacifico(
                               fontSize: 12,
                               color: Theme.of(context).colorScheme.tertiary,

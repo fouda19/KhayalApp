@@ -34,10 +34,16 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.sports_gymnastics_outlined,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.tertiary),
-                      Text(
+                      Container(
+                        height: 60,
+                        width: 100,
+                        child: Image.asset('assets/images/Logo.jpg',
+                            fit: BoxFit.contain
+
+                        ),
+                      ),
+                      
+                Text(
                         'Khayalergy',
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.abrilFatface(
