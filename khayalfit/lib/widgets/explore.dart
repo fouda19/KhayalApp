@@ -40,7 +40,7 @@ class _ExploreState extends State<Explore> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
+              InkWell(
                 onTap: () async {
                   Uri url = Uri.https('www.instagram.com', '/omar_khayal/');
                   if (await canLaunchUrl(url)) {
@@ -74,7 +74,7 @@ class _ExploreState extends State<Explore> {
               SizedBox(
                 width: 30,
               ),
-              GestureDetector(
+              InkWell(
                 onTap: () async {
                   Uri url = Uri.https('www.tiktok.com', '/@khayalergy');
                   if (await canLaunchUrl(url)) {

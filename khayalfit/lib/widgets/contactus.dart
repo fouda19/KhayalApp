@@ -34,7 +34,18 @@ class _ContactUsState extends State<ContactUs> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: InkWell(
+            
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.email,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    size: 15,
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child:
+                     InkWell(
               onHover: (value) {
                 setState(() {
                   ishovering = !ishovering;
@@ -52,16 +63,7 @@ class _ContactUsState extends State<ContactUs> {
                   print('Could not launch $emailLaunchUri');
                 }
               },
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.email,
-                    color: Theme.of(context).colorScheme.tertiary,
-                    size: 15,
-                  ),
-                  SizedBox(width: 10),
-                  Flexible(
-                    child: Text(
+              child:  Text(
                       'Omar_Khayal@gmail.com',
                       style: GoogleFonts.actor(
                         fontSize: (width > 600) ? 25 : 15,
@@ -70,9 +72,10 @@ class _ContactUsState extends State<ContactUs> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  ),
                 ],
               ),
-            ),
+            
           ),
         ]));
   }

@@ -5,6 +5,7 @@ import 'package:khayalfit/pages/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:khayalfit/pages/joinnow.dart';
 
 class CustomerActions extends StatefulWidget {
   const CustomerActions({
@@ -26,7 +27,13 @@ class _ActionsState extends State<CustomerActions> {
   width: 200,
   height: 40, 
   child: ElevatedButton(
-    onPressed: () => {},
+    onPressed: () => {
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => JoinNow()),
+      )
+    },
     child: Text(
       'Join now',
       style: TextStyle(color: Theme.of(context).colorScheme.tertiary),

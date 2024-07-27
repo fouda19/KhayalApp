@@ -5,6 +5,7 @@ import 'package:khayalfit/widgets/dietwithus.dart';
 import 'package:khayalfit/widgets/explore.dart';
 import 'package:khayalfit/widgets/customeractions.dart';
 import 'package:khayalfit/widgets/about.dart';
+import 'package:khayalfit/widgets/package.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
@@ -46,8 +47,8 @@ class _HomePageState extends State<HomePage> {
                 Text(
                         'Khayalergy',
                         overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.abrilFatface(
-                          fontSize: 25,
+                        style: GoogleFonts.doHyeon(
+                          fontSize: 30,
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
@@ -103,6 +104,8 @@ class _HomePageState extends State<HomePage> {
             Explore(),
             SizedBox(height: 20),
             About(),
+            SizedBox(height: 20),
+            
             
           ],
         ),
