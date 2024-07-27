@@ -8,6 +8,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:emailjs/emailjs.dart' as emailjs;
+import '\\widgets\\gradientButton.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -458,6 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     if (_currentQuestionIndex != _questions.length - 1) {
       return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: AppBar(
           title: const Text('Questionnaire'),
         ),
@@ -469,8 +471,7 @@ class _MyHomePageState extends State<MyHomePage> {
               maxHeight: 450,
             ),
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 0, 153,
-                  255),
+              color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(
                   20.0),
               boxShadow: [
@@ -620,24 +621,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         if (_currentQuestionIndex < _questions.length - 2)
-                          Center(
-                            child: SizedBox(
-                              width: 150, // Set your desired width
-                              height: 40, // Set your desired height
-                              child: ElevatedButton(
-                                onPressed: _nextQuestion,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          const Color.fromARGB(
-                                              255, 200, 90, 90)),
-                                  minimumSize: const Size(150, 40),
-                                  maximumSize: const Size(150, 40),
-                                ),
-                                child: const Text('Next'),
-                              ),
-                            ),
-                          )
+                           GradientButton(
+                            text: 'Next',
+                            onPressed: _nextQuestion,
+                          ),
                       ],
                     )
                   ],
@@ -693,8 +680,8 @@ class _MyHomePageState extends State<MyHomePage> {
           _buildDecoratedText('BMR: ${_rep.bmr} calories'),
                 Center(
                   child: SizedBox(
-                    width: 120, // Set your desired width
-                    height: 40, // Set your desired height
+                    width: 120,
+                    height: 40,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
