@@ -6,6 +6,8 @@ import 'package:khayalfit/widgets/explore.dart';
 import 'package:khayalfit/widgets/customeractions.dart';
 import 'package:khayalfit/widgets/about.dart';
 import 'package:khayalfit/widgets/package.dart';
+import 'package:khayalfit/widgets/videoplayer.dart';
+import 'package:video_player/video_player.dart';
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
@@ -18,10 +20,33 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage> {
+    late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/images/welcomevideo.mp4')
+      ..initialize().then((_) {
+        print('video loaded');
+        _controller.setLooping(true);
+        _controller.setVolume(0.0);
+
+        _controller.play();
+        
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    final videoWidth = _controller.value.size?.width ?? 0;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
@@ -58,14 +83,24 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Stack(children: [
-              Container(
-                height: height * 0.9,
+            Container(
+              height: height * 0.9,
+              width: width,
+              child: 
+ Container(
                 width: width,
-                child: Image.asset(
-                  'assets/images/khayal.gif',
-                  fit:(width>600)? BoxFit.contain:BoxFit.cover,
+                child: FittedBox(
+                  fit: width > 650 ? BoxFit.contain : BoxFit.cover,
+                  child: SizedBox(
+                    width: videoWidth,
+                    height: _controller.value.size?.height ?? 0,
+                    child: VideoPlayer(_controller),
+                  ),
                 ),
+              )                 
+                    
               ),
+            
               Positioned(
                 bottom: 80,
                 left: 0,

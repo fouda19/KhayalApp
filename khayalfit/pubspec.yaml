@@ -40,6 +40,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0 
   google_fonts: ^4.0.0
   emailjs: ^4.0.0
+  video_player: ^2.2.19
   
 
 dev_dependencies:
@@ -78,6 +79,7 @@ flutter:
     - assets/.env
     - .env
     - assets/images/Logo.jpg
+    - assets/images/welcomevideo.mp4
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
