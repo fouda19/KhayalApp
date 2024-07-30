@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
        
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
         primary: const Color.fromARGB(255, 0, 0, 0),
-        secondary: const Color.fromARGB(255, 143, 142, 144), 
+        secondary: Color.fromARGB(255, 70, 27, 114), 
         tertiary: const Color.fromARGB(255, 240, 236, 236),
         shadow: const Color.fromARGB(255, 0, 0, 0),
         
