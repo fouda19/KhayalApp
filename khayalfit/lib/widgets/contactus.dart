@@ -54,7 +54,7 @@ class _ContactUsState extends State<ContactUs> {
               onTap: () async {
                 final Uri emailLaunchUri = Uri(
                   scheme: 'mailto',
-                  path: 'Omar_Khayal@gmail.com',
+                  path: 'Omar.hazem.khayal@gmail.com',
                 );
 
                 if (await canLaunchUrl(emailLaunchUri)) {
@@ -64,7 +64,7 @@ class _ContactUsState extends State<ContactUs> {
                 }
               },
               child:  Text(
-                      'Omar_Khayal@gmail.com',
+                      'Omar.hazem.khayal@gmail.com',
                       style: GoogleFonts.actor(
                         fontSize: (width > 600) ? 25 : 15,
                         color:(ishovering)? Theme.of(context).colorScheme.secondary :Theme.of(context).colorScheme.tertiary,

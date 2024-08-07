@@ -27,7 +27,7 @@ class About extends StatelessWidget {
         
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text( 'KhayalFit is a fitness app that helps you to stay fit and healthy. It provides you with a variety of exercises and diet plans to help you achieve your fitness goals. Our app is designed to be user-friendly and easy to use, so you can focus on your fitness journey without any distractions. Whether you are a beginner or an experienced fitness enthusiast, KhayalFit has something for everyone. So download our app today and start your fitness journey with us!',
+          child: Text( 'Khayalergy, founded by a natural athlete with over eight years of experience in science-based training and competed at the World Natural Bodybuilding Federation (WNBF),Khayalergy is a platform that provides personalized insights into your Basal Metabolic Rate (BMR) and daily caloric needs, enabling you to make informed choices that align with your fitness goals. They offer a comprehensive platform with easy-to-follow instructions, curated with delicious foods and images, and are dedicated to making fitness a lifestyle, not a chore.Join us in transforming your fitness goals into reality by following our guidance, enjoying the flavors, and witnessing your transformation into the best version of yourself.',
           style: GoogleFonts.roboto(
             fontSize: (width>600)?25:15,
             color: Theme.of(context).colorScheme.tertiary,

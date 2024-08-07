@@ -20,33 +20,24 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage> {
-    late VideoPlayerController _controller;
+  // void initState() {
+  //   super.initState();
+  //   _controller = VideoPlayerController.asset('assets/images/welcomevideo.mp4')
+  //     ..initialize().then((_) {
+  //       print('video loaded');
+  //       _controller.setLooping(true);
+  //       _controller.setVolume(0.0);
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.asset('assets/images/welcomevideo.mp4')
-      ..initialize().then((_) {
-        print('video loaded');
-        _controller.setLooping(true);
-        _controller.setVolume(0.0);
-
-        _controller.play();
+  //       _controller.play();
         
-        setState(() {});
-      });
-  }
+  //       setState(() {});
+  //     });
+  // }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    final videoWidth = _controller.value.size?.width ?? 0;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SingleChildScrollView(
@@ -83,24 +74,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Stack(children: [
-            Container(
-              height: height * 0.9,
-              width: width,
-              child: 
- Container(
+              Container(
+                height: height * 0.9,
                 width: width,
-                child: FittedBox(
-                  fit: width > 650 ? BoxFit.contain : BoxFit.cover,
-                  child: SizedBox(
-                    width: videoWidth,
-                    height: _controller.value.size?.height ?? 0,
-                    child: VideoPlayer(_controller),
-                  ),
+                child: Image.asset(
+                  'assets/images/khayal1.jpg',
+                  fit:(width>600)? BoxFit.contain:BoxFit.cover,
                 ),
-              )                 
-                    
               ),
-            
               Positioned(
                 bottom: 80,
                 left: 0,

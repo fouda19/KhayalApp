@@ -81,13 +81,23 @@ class _PackageState extends State<Package> {
             ),
             SizedBox(
               
-              height: 30,
+              height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'pay via Instapay',
+                  style: GoogleFonts.roboto(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
               ),
             
  ElevatedButton(
                 onPressed: () async {
                 
-                  Uri url = Uri.https('ipn.eg', '/S/moustafa.ibrahim2583/instapay/4T6jD4');
+                  Uri url = Uri.https('ipn.eg', '/S/omar.khayal/instapay/5Kr78X');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {

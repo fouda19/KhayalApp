@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khayalfit/widgets/package.dart';
@@ -18,9 +19,18 @@ class _JoinNowState extends State<JoinNow> {
       body: SingleChildScrollView(
           child: Column(
         children: [
-          SizedBox(
-            height: 20,
+          Align(
+            alignment: Alignment.topLeft,
+            child: BackButton(
+              color: Theme.of(context).colorScheme.tertiary,
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.secondary),
+                    iconSize: MaterialStateProperty.all(20),
+              ),
+            ),
           ),
+        
           Center(
             child: Text(
               'Our Packages',

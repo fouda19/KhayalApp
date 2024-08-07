@@ -35,7 +35,7 @@ class DietWithUs extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child:Text(
-'custmise your diet plan with us and get the best results. Our diet plans are designed by expert nutritionists to help you achieve your fitness goals. Whether you want to lose weight.',          
+'At Khayalergy, we believe that maintaining a healthy diet should be easy and enjoyable! Our website offers a variety of simple, delicious recipes tailored to your dietary needs, With each recipe, we emphasize quick preparation times and mouthwatering flavors , our meals are designed to delight your taste buds and fit seamlessly into your lifestyle. In addition to, providing beautiful images and step-by-step instructions to guide you along the way. Join us at Khayalergy, where healthy eating is not just a goal, but a delightful experience!',
           style: GoogleFonts.roboto(
             fontSize:  (width>600)?25:15,
             color: Theme.of(context).colorScheme.tertiary,

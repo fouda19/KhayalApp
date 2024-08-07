@@ -44,7 +44,7 @@ class _ImageSliderState extends State<ImageSlider> {
           children: imageWidgets,
           disableUserScrolling: false,
      
-          autoPlayInterval: 5000,
+          autoPlayInterval: 7000,
 
     
           isLoop: true,
