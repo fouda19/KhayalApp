@@ -17,7 +17,14 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Container(
-        color: Theme.of(context).colorScheme.primary,
+      decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 34, 34, 34), Color.fromARGB(255, 57, 56, 56)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+        //color: Theme.of(context).colorScheme.primary,
         child: Column(children: <Widget>[
           Align(
             alignment: Alignment.topLeft,

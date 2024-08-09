@@ -40,90 +40,99 @@ class _HomePageState extends State<HomePage> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Center(
-              child: Container(
-                height: height * 0.1,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 60,
-                        width: 100,
-                        child: Image.asset('assets/images/Logo.jpg',
-                            fit: BoxFit.contain
-
-                        ),
-                      ),
-                      
-                Text(
-                        'Khayalergy',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.doHyeon(
-                          fontSize: 30,
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      body: Container(
+        decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 34, 34, 34), Color.fromARGB(255, 57, 56, 56)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
             ),
-            Stack(children: [
-              Container(
-                height: height * 0.9,
-                width: width,
-                child: Image.asset(
-                  'assets/images/khayal1.jpg',
-                  fit:(width>600)? BoxFit.contain:BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                bottom: 80,
-                left: 0,
-                right: 0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
                 child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Unleash your potential',
-                        style: GoogleFonts.pacifico(
-                          fontSize: 28,
-                          color: Theme.of(context).colorScheme.tertiary,
+                  height: height * 0.1,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 60,
+                          width: 100,
+                          child: Image.asset('assets/images/Logo.jpg',
+                              fit: BoxFit.contain
+        
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Join Khayalergy now',
-                        style: GoogleFonts.aBeeZee(
-                          fontSize: 15,
-                          color: Theme.of(context).colorScheme.tertiary,
+                        
+                  Text(
+                          'Khayalergy',
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.doHyeon(
+                            fontSize: 30,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      CustomerActions(),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ]),
-            SizedBox(height: 40),
-             ExerciseWithUs(),
-            SizedBox(height: 40),
-            DietWithUs(),
-            SizedBox(height: 20),
-            Explore(),
-            SizedBox(height: 20),
-            About(),
-            SizedBox(height: 20),
-            
-            
-          ],
+              Stack(children: [
+                Container(
+                  height: height * 0.9,
+                  width: width,
+                  child: Image.asset(
+                    'assets/images/khayal1.jpg',
+                    fit:(width>600)? BoxFit.contain:BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  bottom: 80,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Unleash your potential',
+                          style: GoogleFonts.pacifico(
+                            fontSize: 28,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Join Khayalergy now',
+                          style: GoogleFonts.aBeeZee(
+                            fontSize: 18,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        CustomerActions(),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+              //SizedBox(height: 40),
+               ExerciseWithUs(),
+              //SizedBox(height: 40),
+              DietWithUs(),
+              //SizedBox(height: 20),
+              Explore(),
+              //SizedBox(height: 20),
+              About(),
+              //SizedBox(height: 20),
+              
+              
+            ],
+          ),
         ),
       ),
     );

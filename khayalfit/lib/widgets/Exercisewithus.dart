@@ -13,7 +13,14 @@ class ExerciseWithUs extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Container(
-       color: Theme.of(context).colorScheme.primary,
+      decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 34, 34, 34), Color.fromARGB(255, 57, 56, 56)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+       //color: Theme.of(context).colorScheme.primary,
       
       child: Column(
         children: <Widget>[
@@ -36,8 +43,8 @@ class ExerciseWithUs extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child:Text(
 'custmise your diet plan with us and get the best results. Our diet plans are designed by expert nutritionists to help you achieve your fitness goals. Whether you want to lose weight.',          
-          style: GoogleFonts.roboto(
-            fontSize: (width>600)?25:15,
+          style: GoogleFonts.bebasNeue(
+            fontSize: (width>600)?25:18,
             color: Theme.of(context).colorScheme.tertiary,
           ),
           ),

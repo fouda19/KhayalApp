@@ -50,31 +50,25 @@ class _JoinNowState extends State<JoinNow> {
               crossAxisAlignment: CrossAxisAlignment.center,
 
               children: [
-                Package(
-                    title: '6 months',
-                    description:
-                        'offer you a cutomized diet plan workout plan and iteraction with for 6 months join now ',
-                    price: '2700 L.E'),
-            SizedBox(
-              width: 50,
-            ),
             Package(
                 title: '3 months',
                 description:
                     'offer you a cutomized diet plan workout plan and iteraction with for 3 months join now ',
                 price: '1250 L.E'),
-            SizedBox(height: 20),
+            SizedBox(
+              width: 50,
+            ),
+             Package(
+                    title: '6 months',
+                    description:
+                        'offer you a cutomized diet plan workout plan and iteraction with for 6 months join now ',
+                    price: '2400 L.E'),
               ],
             ):Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
 
               children: [
-                Package(
-                    title: '6 months',
-                    description:
-                        'offer you a cutomized diet plan workout plan and iteraction with for 6 months join now ',
-                    price: '2700 L.E'),
             SizedBox(
               height:  50,
             ),
@@ -84,6 +78,11 @@ class _JoinNowState extends State<JoinNow> {
                     'offer you a cutomized diet plan workout plan and iteraction with for 3 months join now ',
                 price: '1250 L.E'),
             SizedBox(height: 20),
+            Package(
+                    title: '6 months',
+                    description:
+                        'offer you a cutomized diet plan workout plan and iteraction with for 6 months join now ',
+                    price: '2400 L.E'),
               ],
             ),
             SizedBox(height: 20,)

@@ -9,6 +9,9 @@ import 'package:mailer/smtp_server.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:emailjs/emailjs.dart' as emailjs;
 import '\\widgets\\gradientButton.dart';
+//import 'package:firebase_functions_interop/firebase_functions_interop.dart' as functions;
+
+//final config = functions.getFunctions().config;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -126,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final NutritionReport1 _rep = NutritionReport1(0, 0, 0, 0, 0, 0, 0);
   int flag = 0;
 
-  Future<void> sendEmail() async {
+  Future<int> sendEmail() async {
     Map<String, dynamic> templateParams = {
       'gender': _answers[0],
       'age': _answers[1],
@@ -156,13 +159,14 @@ class _MyHomePageState extends State<MyHomePage> {
         emailjs.Options(
           publicKey: 'PXoai66gXALOP5zUd',
           privateKey: dotenv.env['PRIVATE_KEY']!,
+          //privateKey: config.x.private_key!,
         ),
       );
-      print('SUCCESS!');
-      flag = 1;
+      //print('SUCCESS!');
+      return 1;
     } catch (error) {
-      print('$error');
-      flag = 2;
+      //print('$error');
+      return 2;
     }
   }
 
@@ -280,43 +284,67 @@ class _MyHomePageState extends State<MyHomePage> {
     // submit button
     if (_validateCurrentQuestion() == "truetrue") {
       _calculateReport();
-      //sendEmail();
-      //sendEmail is commented as there is a monthly qouta for the emails provided by EmailJS
-      if /*(flag == 1)*/(true) {
-        print(_answers);
-        if (_currentQuestionIndex < _questions.length) {
-          setState(() {
-            _currentQuestionIndex++;
-          });
-        }
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Thank You'),
-              content: const Text('Your data has been received.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => Theme.of(context).colorScheme.secondary),
+      var flag = sendEmail();
+      flag.then((value) {
+        if (value == 1) {
+          //print(_answers);
+          if (_currentQuestionIndex < _questions.length) {
+            setState(() {
+              _currentQuestionIndex++;
+            });
+          }
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Thank You'),
+                content: const Text('Your data has been received.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).colorScheme.secondary),
+                    ),
+                    child: const Text('OK'),
                   ),
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }else {
-        print('Error sending email!!');
-      }
+                ],
+              );
+            },
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Error'),
+                content: const Text('Error sending the email.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).colorScheme.secondary),
+                    ),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+          //print('Error sending email!!');
+        }
+      });
+      //sendEmail is commented as there is a monthly qouta for the emails provided by EmailJS
+      
     } else {
       if (_validateCurrentQuestion() == "falsefalse" ||
           _validateCurrentQuestion() == "falsetrue") {
@@ -430,20 +458,20 @@ class _MyHomePageState extends State<MyHomePage> {
     margin: const EdgeInsets.symmetric(vertical: 4.0),
     padding: const EdgeInsets.all(8.0),
     decoration: BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [
-          Color.fromARGB(255, 156, 151, 151),
-          Color.fromARGB(255, 200, 200, 200),
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
+      // gradient: const LinearGradient(
+      //   colors: [
+      //     Color.fromARGB(255, 156, 151, 151),
+      //     Color.fromARGB(255, 200, 200, 200),
+      //   ],
+      //   begin: Alignment.topLeft,
+      //   end: Alignment.bottomRight,
+      // ),
       borderRadius: BorderRadius.circular(15.0),
       boxShadow: [
         BoxShadow(
           color: Colors.grey.withOpacity(0.5),
           spreadRadius: 2,
-          blurRadius: 5,
+          blurRadius: 0,
           offset: const Offset(0, 3),
         ),
       ],
@@ -518,13 +546,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     if (question.type == QuestionType.radio)
                       ...question.options!.map((option) {
-                        return RadioListTile(
-                          title: Text(option),
-                          value: option,
-                          activeColor: Colors.black,
-                          groupValue: _answers[index],
-                          onChanged: (value) =>
-                              setState(() => _saveAnswer(index, value)),
+                        return Column(
+                          children: [
+                            RadioListTile(
+                              title: Text(option),
+                              value: option,
+                              activeColor: Colors.black,
+                              groupValue: _answers[index],
+                              onChanged: (value) =>
+                                  setState(() => _saveAnswer(index, value)),
+                            ),
+                          ],
                         );
                         // ignore: unnecessary_to_list_in_spreads
                       }).toList(),
@@ -590,18 +622,30 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: ElevatedButton(
                                 onPressed: _previousQuestion,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          const Color.fromARGB(
-                                              255, 200, 90, 90)),
+                                  backgroundColor: Theme.of(context).colorScheme.secondary,
                                   minimumSize: const Size(150, 40),
                                   maximumSize: const Size(150, 40),
                                 ),
                                 child: const Text('Back'),
                               ),
                             ),
-                          )
-                        else if (_currentQuestionIndex == _questions.length - 2)
+                          ),
+                        if (_currentQuestionIndex == _questions.length - 2)
+                          // Center(
+                          //   child: SizedBox(
+                          //     width: 150,
+                          //     height: 40,
+                          //     child: ElevatedButton(
+                          //       onPressed: _previousQuestion,
+                          //       style: ElevatedButton.styleFrom(
+                          //         backgroundColor: Theme.of(context).colorScheme.secondary,
+                          //         minimumSize: const Size(150, 40),
+                          //         maximumSize: const Size(150, 40),
+                          //       ),
+                          //       child: const Text('Back'),
+                          //     ),
+                          //   ),
+                          // ),
                           Center(
                             child: SizedBox(
                               width: 150, 
@@ -609,10 +653,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: ElevatedButton(
                                 onPressed: _submitAnswers,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      MaterialStateColor.resolveWith((states) =>
-                                          const Color.fromARGB(
-                                              255, 200, 90, 90)),
+                                  backgroundColor: Theme.of(context).colorScheme.secondary,
                                   minimumSize: const Size(150, 40),
                                   maximumSize: const Size(150, 40),
                                 ),
@@ -621,10 +662,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         if (_currentQuestionIndex < _questions.length - 2)
-                           GradientButton(
-                            text: 'Next',
-                            onPressed: _nextQuestion,
-                          ),
+                           ElevatedButton(
+                                onPressed: _nextQuestion,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                                  minimumSize: const Size(150, 40),
+                                  maximumSize: const Size(150, 40),
+                                ),
+                                child: const Text('Next'),
+                              ),
                       ],
                     )
                   ],
@@ -639,6 +685,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: const Text('Nutrition Report'),
         ),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
         body: Center(
           child: Container(
             padding: const EdgeInsets.all(16.0),
@@ -647,8 +694,7 @@ class _MyHomePageState extends State<MyHomePage> {
               maxHeight: 450,
             ),
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 0, 153,
-                  255),
+              color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(20.0),
               boxShadow: [
                 BoxShadow(
@@ -659,44 +705,45 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Your Nutrition Report',
-                  style: TextStyle(fontSize: 24),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                 _buildDecoratedText(
-              'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams'),
-          _buildDecoratedText(
-              'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams'),
-          _buildDecoratedText(
-              'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams'),
-          _buildDecoratedText(
-              'Fats Intake: 15% - 35% of daily calories intake', isStatic: true),
-          _buildDecoratedText('BMR: ${_rep.bmr} calories'),
-                Center(
-                  child: SizedBox(
-                    width: 120,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => const Color.fromARGB(255, 200, 90, 90)),
-                        minimumSize: const Size(120, 40),
-                        maximumSize: const Size(120, 40),
-                      ),
-                      child: const Text('OK'),
-                    ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Your Nutrition Report',
+                    style: TextStyle(fontSize: 24),
+                    textAlign: TextAlign.center,
                   ),
-                )
-              ],
+                  const SizedBox(height: 20),
+                   _buildDecoratedText(
+                'Protein Intake for Normal Health: ${_rep.proteinNormalMin} - ${_rep.proteinNormalMax} grams'),
+                        _buildDecoratedText(
+                'Protein Intake for Growth: ${_rep.proteinGrowthMin} - ${_rep.proteinGrowthMax} grams'),
+                        _buildDecoratedText(
+                'Carbs Intake: ${_rep.carbsMin} - ${_rep.carbsMax} grams'),
+                        _buildDecoratedText(
+                'Fats Intake: 15% - 35% of daily calories intake', isStatic: true),
+                        _buildDecoratedText('BMR: ${_rep.bmr} calories'),
+                  Center(
+                    child: SizedBox(
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                          minimumSize: const Size(120, 40),
+                          maximumSize: const Size(120, 40),
+                        ),
+                        child: const Text('OK'),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

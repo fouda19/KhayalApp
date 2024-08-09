@@ -13,7 +13,14 @@ class DietWithUs extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Container(
-       color: Theme.of(context).colorScheme.shadow,
+      decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color.fromARGB(255, 34, 34, 34), Color.fromARGB(255, 57, 56, 56)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+       //color: Theme.of(context).colorScheme.primary,
       
       child: Column(
         children: <Widget>[
@@ -36,8 +43,8 @@ class DietWithUs extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child:Text(
 'At Khayalergy, we believe that maintaining a healthy diet should be easy and enjoyable! Our website offers a variety of simple, delicious recipes tailored to your dietary needs, With each recipe, we emphasize quick preparation times and mouthwatering flavors , our meals are designed to delight your taste buds and fit seamlessly into your lifestyle. In addition to, providing beautiful images and step-by-step instructions to guide you along the way. Join us at Khayalergy, where healthy eating is not just a goal, but a delightful experience!',
-          style: GoogleFonts.roboto(
-            fontSize:  (width>600)?25:15,
+          style: GoogleFonts.bebasNeue(
+            fontSize: (width>600)?25:18,
             color: Theme.of(context).colorScheme.tertiary,
           ),
           ),

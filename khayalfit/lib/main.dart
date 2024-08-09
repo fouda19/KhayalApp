@@ -50,18 +50,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
        
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple,
-        primary: const Color.fromARGB(255, 0, 0, 0),
-        secondary: Color.fromARGB(255, 70, 27, 114), 
-        tertiary: const Color.fromARGB(255, 240, 236, 236),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 183, 139, 58),
+        primary: Color.fromARGB(255, 0, 0, 0),//Color.fromARGB(255, 57, 56, 56), grey
+        secondary: Color.fromARGB(255, 229, 101, 52), 
+        tertiary: const Color.fromARGB(255, 255, 255, 255),
         shadow: const Color.fromARGB(255, 0, 0, 0),
         
         ),
         useMaterial3: true,
         extensions: const [
           MyColors(
-            gradientStart: Color.fromARGB(255, 200, 90, 90),
-            gradientEnd: Color.fromARGB(255, 255, 150, 150),
+            gradientStart: Color.fromARGB(255, 177, 13, 7),
+            gradientEnd: Color.fromARGB(255, 226, 59, 8),
           ),
         ],
       ),
