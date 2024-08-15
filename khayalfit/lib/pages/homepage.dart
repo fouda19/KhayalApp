@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: unnecessary_import
 import 'package:flutter/widgets.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+//import 'package:mailer/mailer.dart';
+//import 'package:mailer/smtp_server.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:emailjs/emailjs.dart' as emailjs;
-import '\\widgets\\gradientButton.dart';
-//import 'package:firebase_functions_interop/firebase_functions_interop.dart' as functions;
+//import '\\widgets\\gradientButton.dart';
+// import 'package:firebase_functions_interop/firebase_functions_interop.dart' as functions;
 
-//final config = functions.getFunctions().config;
+// final config = functions.getFunctions().config;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -102,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
       "What is your goal?",
       QuestionType.radio,
       options: [
-        "Lose weight and get shredded to the bones.",
-        "Gain lean Muscle and get big."
+        "Shed pounds and achieve a ripped physique.",
+        "Build lean muscle and grow in size."
       ],
     ),
     Question(
