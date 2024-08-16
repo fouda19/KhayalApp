@@ -8,7 +8,7 @@ import 'package:khayalfit/widgets/explore.dart';
 import 'package:khayalfit/widgets/customeractions.dart';
 import 'package:khayalfit/widgets/about.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-
+import 'package:video_player/video_player.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -19,9 +19,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
-
-class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   //di 3ashan el sora tegy men fo2
   late final AnimationController imagecontroller = AnimationController(
     duration: const Duration(seconds: 2),
@@ -30,18 +28,14 @@ class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
   late final Animation<Offset> offsetimageAnimation = Tween<Offset>(
     end: Offset.zero,
     begin: const Offset(0, -2),
-  ).animate(CurvedAnimation(
-    parent: imagecontroller,
-    curve: Curves.easeInOutBack
-  ));
+  ).animate(
+      CurvedAnimation(parent: imagecontroller, curve: Curves.easeInOutBack));
   //logoo
-    late final Animation<Offset> offsetlogoAnimation = Tween<Offset>(
+  late final Animation<Offset> offsetlogoAnimation = Tween<Offset>(
     end: Offset.zero,
     begin: const Offset(0, -2),
-  ).animate(CurvedAnimation(
-    parent: imagecontroller,
-    curve: Curves.easeInOutBack
-  ));
+  ).animate(
+      CurvedAnimation(parent: imagecontroller, curve: Curves.easeInOutBack));
   //di 3ashan el zarayer
 
   late final Animation<Offset> offsetbuttoncontroller = Tween<Offset>(
@@ -61,12 +55,21 @@ class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
     curve: Curves.easeInOut,
   ));
 
+  late VideoPlayerController _videoPlayerController;
+
   void initState() {
     super.initState();
- 
-        
-    imagecontroller.forward();
 
+    _videoPlayerController =
+        VideoPlayerController.asset('assets/images/welcomevideo.mp4')
+          ..initialize().then((_) {
+            setState(() {}); // Update the state once the video is initialized
+            _videoPlayerController.setLooping(true); // Loop the video
+            _videoPlayerController.setVolume(0.0); // Mute the video
+            _videoPlayerController.play(); // Optionally start playing the video
+          });
+
+    imagecontroller.forward();
   }
 
   @override
@@ -77,12 +80,15 @@ class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Container(
         decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 34, 34, 34), Color.fromARGB(255, 57, 56, 56)],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-            ),
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 34, 34, 34),
+              Color.fromARGB(255, 57, 56, 56)
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -100,12 +106,9 @@ class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
                             height: 60,
                             width: 100,
                             child: Image.asset('assets/images/Logo.png',
-                                fit: BoxFit.contain
-                              
-                            ),
+                                fit: BoxFit.contain),
                           ),
-                          
-                                        Text(
+                          Text(
                             'Khayalergy',
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.doHyeon(
@@ -120,67 +123,61 @@ class _HomePageState extends State<HomePage>   with TickerProviderStateMixin {
                 ),
               ),
               Stack(children: [
-              SlideTransition(
-                position: offsetimageAnimation,
+                SlideTransition(
+                  position: offsetimageAnimation,
                   child: Container(
                     height: height * 0.9,
                     width: width,
-                    child: Image.asset(
-                      'assets/images/khayal1.jpg',
-                      fit:(width>600)? BoxFit.contain:BoxFit.cover,
-                    ),
+                    child: _videoPlayerController.value.isInitialized
+                        ? VideoPlayer(_videoPlayerController)
+                        : Center(
+                            child:
+                                CircularProgressIndicator()), // Show a loader while the video initializes
                   ),
                 ),
                 Positioned(
                   bottom: 80,
                   left: 0,
                   right: 0,
-                  
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: [
-                          SlideTransition(
-                            position: offsettextcontroller,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Unleash your potential',
-                                  style: GoogleFonts.pacifico(
-                                    fontSize: 28,
-                                    color: Theme.of(context).colorScheme.tertiary,
-                                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        SlideTransition(
+                          position: offsettextcontroller,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Unleash your potential',
+                                style: GoogleFonts.pacifico(
+                                  fontSize: 28,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
-                              
-                                                  
-                            SizedBox(height: 10),
-                            Text(
-                              'Join Khayalergy now',
-                              style: GoogleFonts.aBeeZee(
-                                fontSize: 18,
-                                color: Theme.of(context).colorScheme.tertiary,
                               ),
-                            ),
-                              ],),
+                              SizedBox(height: 10),
+                              Text(
+                                'Join Khayalergy now',
+                                style: GoogleFonts.aBeeZee(
+                                  fontSize: 18,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 20),
-                          SlideTransition(
+                        ),
+                        SizedBox(height: 20),
+                        SlideTransition(
                             position: offsetbuttoncontroller,
                             child: CustomerActions()),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-              
+                ),
               ]),
-      
               ExerciseWithUs(),
               DietWithUs(),
               Explore(),
               About(),
-        
-              
-              
             ],
           ),
         ),
